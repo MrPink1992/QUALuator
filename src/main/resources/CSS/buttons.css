@@ -1,0 +1,11 @@
+#menu-btn {
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-radius: 0;
+    -fx-border-style: solid;
+}
+
+#menu-btn:hover {
+    -fx-background-color: black;
+    fx-text-color: #ffffff;
+}
