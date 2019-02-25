@@ -9,9 +9,9 @@ import javafx.stage.Stage;
 
 public class SceneController {
 
-    public void sceneHandler(String sceneName, ActionEvent event) throws Exception{
-        Parent viewParent = FXMLLoader.load(getClass().getResource("/FXML/" + sceneName));
-        Scene mainScene = new Scene(viewParent, 800, 600);
+    public void changeScene(String sceneName, ActionEvent event) throws Exception{
+        Parent parent = FXMLLoader.load(getClass().getResource("/FXML/" + sceneName));
+        Scene mainScene = new Scene(parent, 800, 600);
 
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(mainScene);

@@ -2,14 +2,8 @@ package at.fh.bac;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -25,7 +19,7 @@ public class MainContrroller {
 
     @FXML
     private void navigateToMenu(ActionEvent event) throws Exception {
-      sceneController.sceneHandler("menu.fxml", event);
+      sceneController.changeScene("menu.fxml", event);
 
     }
 
@@ -41,7 +35,7 @@ public class MainContrroller {
 
         alert.showAndWait();
 
-        sceneController.sceneHandler("preview.fxml", event);
+        sceneController.changeScene("preview.fxml", event);
         PreviewController previewController = new PreviewController();
         previewController.initialize();
 

@@ -3,14 +3,7 @@ package at.fh.bac;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
-import javafx.scene.text.Text;
-
-import javax.sound.midi.SysexMessage;
-import java.io.FileNotFoundException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class PreviewController {
 
@@ -38,7 +31,7 @@ public class PreviewController {
 
     @FXML
     private void goBack(ActionEvent event) throws Exception{
-        sceneController.sceneHandler("main.fxml", event);
+        sceneController.changeScene("main.fxml", event);
     }
 
 
