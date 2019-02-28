@@ -1,10 +1,11 @@
-package at.fh.bac;
+package at.fh.bac.Controller;
 
+import at.fh.bac.Main;
+import at.fh.bac.Model.FileListModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import sun.reflect.annotation.ExceptionProxy;
 
 
 import java.io.File;
@@ -12,9 +13,9 @@ import java.util.List;
 
 public class MainController {
 
-    public List<File> selectedFiles;
+    private List<File> selectedFiles;
     private SceneController sceneController = new SceneController();
-
+    public static FileListModel selectedFilesList = new FileListModel();
 
 
     /**
@@ -29,13 +30,15 @@ public class MainController {
 
         FileChooser fileChooser = new FileChooser();
         selectedFiles = fileChooser.showOpenMultipleDialog(SceneController.getStage(event));
-        Main.files = selectedFiles;
+        selectedFilesList.setFileList(selectedFiles);
+
+        // Main.files = selectedFiles;
 
         System.out.println(selectedFiles);
 
         sceneController.changeScene("preview.fxml", event);
-        PreviewController previewController = new PreviewController();
-        previewController.initialize(event);
+        //PreviewController previewController = new PreviewController();
+        //previewController.initialize();
 
 
     }

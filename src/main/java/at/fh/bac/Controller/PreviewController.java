@@ -1,40 +1,42 @@
-package at.fh.bac;
+package at.fh.bac.Controller;
 
 
+import at.fh.bac.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
+import javax.annotation.Resource;
 import java.io.File;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class PreviewController {
+import static at.fh.bac.Controller.MainController.selectedFilesList;
+
+public class PreviewController implements Initializable {
 
     private SceneController sceneController = new SceneController();
 
-    @FXML public TextArea fileNames;
+    @FXML private TextArea fileNames;
+
 
     private List<File> selectedFiles;
 
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
 
-    public void initialize(ActionEvent event) {
+        System.out.println("You selected following files: " + selectedFilesList.toString());
 
-        try {
-            for (File file : Main.files){
-                fileNames.appendText(file.toString() + "\n");
-                System.out.print(file.toString());
-            }
-        }catch(NullPointerException nullPointerException){
-            System.out.println("no files specified");
-            nullPointerException.printStackTrace();
+
+        for (File file : selectedFilesList.getFileList()) {
+            fileNames.appendText(file.getName().toString() + "\n");
+            System.out.print(file.toString());
         }
-
-
-
-
-        }
+    }
 
 
 

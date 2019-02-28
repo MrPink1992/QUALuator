@@ -5,10 +5,10 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.bac.PreviewController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.bac.Controller.PreviewController">
    <children>
       <Label layoutX="363.0" layoutY="131.0" text="File Preview" />
-       <TextArea fx:id="fileContent" editable="false" layoutX="131.0" layoutY="164.0" prefHeight="226.0" prefWidth="538.0" />
+       <TextArea fx:id="fileNames" editable="false" layoutX="131.0" layoutY="164.0" prefHeight="226.0" prefWidth="538.0" />
       <Button defaultButton="true" layoutX="437.0" layoutY="425.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="54.0" text="Next" />
       <Button layoutX="309.0" layoutY="425.0" mnemonicParsing="false" onAction="#goBack" prefHeight="27.0" prefWidth="54.0" text="Back" />
    </children>

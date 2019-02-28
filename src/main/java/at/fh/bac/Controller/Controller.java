@@ -1,4 +1,4 @@
-package at.fh.bac;
+package at.fh.bac.Controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

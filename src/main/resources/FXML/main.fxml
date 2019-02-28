@@ -8,11 +8,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.bac.MainContrroller">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.bac.Controller.MainController">
    <children>
       <Text layoutX="326.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please upload XML Files" />
       <Button layoutX="349.0" layoutY="328.0" mnemonicParsing="false" onAction="#navigateToMenu" text="Back to Menu" />
-      <Button layoutX="349.0" layoutY="239.0" mnemonicParsing="false" onAction="#filePicker" prefHeight="27.0" prefWidth="102.0" text="Upload FIle" />
+      <Button layoutX="349.0" layoutY="239.0" mnemonicParsing="false" onAction="#filePicker" prefHeight="27.0" prefWidth="102.0" text="Upload File" />
       <ImageView fitHeight="96.0" fitWidth="65.0" layoutX="368.0" layoutY="80.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/oval.png" />
