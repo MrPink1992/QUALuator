@@ -20,7 +20,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="QUALuator" target="6" />
+      <module name="QUALuator" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
