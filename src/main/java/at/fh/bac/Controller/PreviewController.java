@@ -50,27 +50,24 @@ public class PreviewController implements Initializable {
 
     private List<String> getFileNames() {
 
-        System.out.println("List Of Files: " + listOfFiles);
-        System.out.println("List Of Filenames: " + listOfFileNames + " <-- can be null because it is filled after this println");
-
         for (File file : listOfFiles) {
             listOfFileNames.add(file.getName());
         }
-        System.out.println(listOfFileNames);
         return fileNameList;
     }
 
 
     @FXML
     private void goBack(ActionEvent event) throws Exception {
+        selectedFilesList.setFileList(null);
         sceneController.changeScene("main.fxml", event);
     }
 
 
     /**
-     *
-     * @param filePath
-     * @return
+     * Read Content of File
+     * @param filePath : Path of File
+     * @return : returns a contentBuilder
      */
     private static String readLineByLineJava8(String filePath) {
         StringBuilder contentBuilder = new StringBuilder();
