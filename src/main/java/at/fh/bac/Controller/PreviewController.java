@@ -5,9 +5,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -46,6 +48,8 @@ public class PreviewController implements Initializable {
             fileListView.getItems().add(file);
         }
 
+
+
     }
 
     private List<String> getFileNames() {
@@ -54,6 +58,11 @@ public class PreviewController implements Initializable {
             listOfFileNames.add(file.getName());
         }
         return fileNameList;
+    }
+
+    @FXML
+    private void goToSyntaxValidation(ActionEvent event) throws Exception {
+        sceneController.changeScene("syntaxValidation.fxml", event);
     }
 
 

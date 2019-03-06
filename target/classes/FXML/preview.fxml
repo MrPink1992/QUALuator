@@ -12,7 +12,7 @@
 <AnchorPane prefHeight="600.0" prefWidth="800.0" stylesheets="@../CSS/main.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.bac.Controller.PreviewController">
    <children>
       <Label layoutX="363.0" layoutY="138.0" text="File Preview" />
-      <Button defaultButton="true" layoutX="437.0" layoutY="439.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="54.0" text="Next" />
+      <Button onAction="#goToSyntaxValidation" defaultButton="true" layoutX="437.0" layoutY="439.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="54.0" text="Next"/>
       <Button layoutX="309.0" layoutY="439.0" mnemonicParsing="false" onAction="#goBack" prefHeight="27.0" prefWidth="54.0" text="Back" />
       <ImageView fitHeight="96.0" fitWidth="65.0" layoutX="368.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true">
          <image>
