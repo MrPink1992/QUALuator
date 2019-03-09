@@ -17,12 +17,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MainController {
+public class FileController {
 
     private SceneController sceneController = new SceneController();
 
     public static FileListModel selectedFilesList = new FileListModel();
-
 
     private List<File> selectedFiles = new ArrayList<>();
 
@@ -39,7 +38,7 @@ public class MainController {
 
         FileChooser fileChooser = new FileChooser();
         // ExtensionFilter to only accept .xml files
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("BPMN files (*.bpmn)", "*.bpmn");
         fileChooser.getExtensionFilters().add(extFilter);
 
 
@@ -78,7 +77,7 @@ public class MainController {
 
                 System.out.println(fileExtension);
 
-                if (!fileExtension.equals("xml")){
+                if (!fileExtension.equals("bpmn")){
                     continue;}
                 else{selectedFiles.add(file);}
             }
