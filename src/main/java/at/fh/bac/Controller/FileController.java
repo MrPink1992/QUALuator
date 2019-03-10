@@ -75,22 +75,23 @@ public class FileController {
 
                 String fileExtension = FilenameUtils.getExtension(file.getName());
 
-                System.out.println(fileExtension);
 
                 if (!fileExtension.equals("bpmn")){
                     continue;}
                 else{selectedFiles.add(file);}
+
             }
 
-            System.out.println(selectedFiles);
+
 
             selectedFilesList.setFileList(selectedFiles);
+            sceneController.changeScene("preview.fxml", event);
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            //e.printStackTrace();
+            sceneController.changeScene("main.fxml", event);
         }
 
-        sceneController.changeScene("preview.fxml", event);
 
     }
 
