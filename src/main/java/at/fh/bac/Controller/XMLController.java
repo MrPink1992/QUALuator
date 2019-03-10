@@ -25,7 +25,6 @@ import org.xml.sax.SAXParseException;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
@@ -44,6 +43,8 @@ public class XMLController implements Initializable {
     private SceneController sceneController = new SceneController();
     private List<File> filesToValidate;
     private int errorCount = 0;
+    private HashMap<File, List<Exception>> errorFileMap;
+    private List<Exception> errorList = new ArrayList<>();
 
     @FXML
     TextArea validationTxtArea;
@@ -71,6 +72,8 @@ public class XMLController implements Initializable {
 
         try {
             filesToValidate = selectedFilesList.getFileList();
+            errorFileMap = new HashMap<>();
+
             fetchXMLSchema();
             //fileValidator();
 
@@ -85,62 +88,21 @@ public class XMLController implements Initializable {
             for (File file : filesToValidate) {
                 validationTxtArea.appendText("\n----------------------------------------------------------------------------------\n");
                 errorCount = 0;
+                errorList = new ArrayList<>();
                 validateXml(schema, file.getPath());
+                errorFileMap.put(file, errorList);
+                //System.out.println(errorCount + " errors have been found in " + file.getName());
+                //System.out.println(errorFileMap);
             }
+
+            /*
+            errorFileMap.forEach((key, value) -> {
+                System.out.println("File : " + key + " Exceptions : " + value);
+            });
+            */
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-
-    private void fileValidator() {
-
-        validationTxtArea.appendText("Starting syntax validation...\n");
-
-        try {
-
-            URL schemaPath = new URL(cl.getResource("XML/schema.xsd").toString());
-            //URL schemaFile = new URL(cl.getResource("XML/schema.xsd"));
-
-            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = factory.newSchema(schemaPath);
-            Validator validator = schema.newValidator();
-
-
-            for (File file : filesToValidate) {
-                validationTxtArea.appendText("--------------------------------------------------------------------------------------\n\n");
-                validationTxtArea.appendText("Validating file: " + file.getName() + "\n");
-
-                syntaxErrorHandler.setExceptions(new ArrayList<>());
-                validator.setErrorHandler(syntaxErrorHandler);
-                String fileContent = readLineByLineJava8(file.getPath());
-
-                validator.validate(new StreamSource(new ByteArrayInputStream(fileContent.getBytes(StandardCharsets.UTF_8))));
-
-                System.out.println("Exceptions: " + syntaxErrorHandler.getExceptions());
-                if (syntaxErrorHandler.getExceptions().size() != 0) {
-                    for (Exception e : syntaxErrorHandler.getExceptions()) {
-                        validationTxtArea.appendText(e.getMessage() + "\n");
-                    }
-                } else {
-                    validationTxtArea.appendText("-No Errors Found-\n");
-                }
-            }
-        } catch (SAXException sax) {
-
-            sax.printStackTrace();
-
-        } catch (NullPointerException np) {
-            try {
-                np.printStackTrace();
-                fetchXMLSchema();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } catch (IOException io) {
-            System.out.println("File not found");
-            io.printStackTrace();
         }
     }
 
@@ -204,27 +166,21 @@ public class XMLController implements Initializable {
             ErrorHandler errorHandler = new ErrorHandler() {
                 @Override
                 public void warning(SAXParseException exception) throws SAXException {
-                    errorCount++;
-                    System.out.println(exception.toString());
-                    validationTxtArea.appendText(exception.toString() + "\n");
-
+                    addException(exception);
+                    //exception.printStackTrace();
                 }
 
                 @Override
                 public void error(SAXParseException exception) throws SAXException {
-
-                    System.out.println(exception.toString());
-                    validationTxtArea.appendText(exception.toString() + "\n");
-                    errorCount++;
-                    // continue with validatin process
-                    // throw e;
+                    addException(exception);
+                    //exception.printStackTrace();
                 }
 
                 @Override
                 public void fatalError(SAXParseException exception) throws SAXException {
-                    System.out.println(exception.toString());
-                    validationTxtArea.appendText(exception.toString() + "\n");
-                    errorCount++;
+                    addException(exception);
+                    //exception.printStackTrace();
+
                 }
             };
 
@@ -244,7 +200,16 @@ public class XMLController implements Initializable {
             System.out.println();
             System.out.println(e.toString());
             validationTxtArea.appendText(e.toString());
+            //e.printStackTrace();
         }
+    }
+
+    private void addException(Exception exception){
+        errorCount++;
+        errorList.add(exception);
+        System.out.println(exception.toString());
+        validationTxtArea.appendText(exception.toString() + "\n");
+        //exception.printStackTrace();
     }
 
 }
