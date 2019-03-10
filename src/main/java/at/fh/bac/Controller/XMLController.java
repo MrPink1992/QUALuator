@@ -4,6 +4,7 @@ import at.fh.bac.ErrorHandler.SyntaxErrorHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 
@@ -45,6 +46,7 @@ public class XMLController implements Initializable {
     private int errorCount = 0;
     private HashMap<File, List<Exception>> errorFileMap;
     private List<Exception> errorList = new ArrayList<>();
+    @FXML private Button nextButton = new Button();
 
     @FXML
     TextArea validationTxtArea;
@@ -61,7 +63,7 @@ public class XMLController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        nextButton.setDisable(true);
         validationTxtArea.setEditable(false);
 
         xsdFileList.put("schema.xsd", "https://www.omg.org/spec/BPMN/20100501/BPMN20.xsd");
@@ -94,6 +96,7 @@ public class XMLController implements Initializable {
                 //System.out.println(errorCount + " errors have been found in " + file.getName());
                 //System.out.println(errorFileMap);
             }
+            nextButton.setDisable(false);
 
             /*
             errorFileMap.forEach((key, value) -> {
@@ -126,11 +129,6 @@ public class XMLController implements Initializable {
     }
 
 
-    static void printFullTrace(Throwable throwable) {
-        for (StackTraceElement element : throwable.getStackTrace()) {
-            System.out.println(element);
-        }
-    }
 
     private void fetchXMLSchema() throws Exception {
 
@@ -153,6 +151,11 @@ public class XMLController implements Initializable {
     private void goBack(ActionEvent event) throws Exception {
 
         sceneController.changeScene("main.fxml", event);
+    }
+
+    @FXML
+    private void next(ActionEvent event) throws Exception{
+        sceneController.changeScene("semanticsForm.fxml", event);
     }
 
 

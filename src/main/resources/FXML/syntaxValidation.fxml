@@ -17,13 +17,14 @@
             <Image url="@../images/oval.png" />
          </image>
       </ImageView>
-      <Text layoutX="401.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="S">
+      <Text fill="WHITE" layoutX="401.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="S">
          <font>
             <Font size="24.0" />
          </font>
       </Text>
-      <Text layoutX="358.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Validating Syntax" />
+      <Text fill="WHITE" layoutX="358.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Validating Syntax" />
       <TextArea fx:id="validationTxtArea" layoutX="135.0" layoutY="250.0" prefHeight="319.0" prefWidth="547.0" />
       <Button layoutX="81.0" layoutY="537.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
+      <Button fx:id="nextButton" layoutX="682.0" layoutY="540.0" mnemonicParsing="false" onAction="#next" text="Next" />
    </children>
 </AnchorPane>

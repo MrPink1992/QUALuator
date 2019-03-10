@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import org.apache.commons.io.FilenameUtils;
+import org.omg.CORBA.SystemException;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +34,9 @@ public class FileController {
      * @param event : ActionEvent needed to get the stage
      * @throws Exception : handles exceptions
      */
+
     @FXML
+
     private void filePicker(ActionEvent event) throws Exception {
 
         FileChooser fileChooser = new FileChooser();
@@ -60,40 +63,41 @@ public class FileController {
      * @throws Exception : Exception Handling
      */
     @FXML
-    private void dirPicker(ActionEvent event) throws Exception{
-        DirectoryChooser directoryChooser = new DirectoryChooser();
 
-        try (Stream<Path> walk = Files.walk(Paths.get((directoryChooser.showDialog(SceneController.getStage(event))).toString()))) {
+    private  void dirPicker(ActionEvent event) throws Exception{
 
-            List<String> result = walk.filter(Files::isRegularFile)
-                    .map(x -> x.toString()).collect(Collectors.toList());
+            DirectoryChooser directoryChooser = new DirectoryChooser();
 
-            // create new File for each XML-File in directory
-            for (String path : result){
+            try (Stream<Path> walk = Files.walk(Paths.get((directoryChooser.showDialog(SceneController.getStage(event))).toString()))) {
 
-                File file = new File(path);
+                List<String> result = walk.filter(Files::isRegularFile)
+                        .map(x -> x.toString()).collect(Collectors.toList());
 
-                String fileExtension = FilenameUtils.getExtension(file.getName());
+                // create new File for each XML-File in directory
+                for (String path : result) {
+
+                    File file = new File(path);
+
+                    String fileExtension = FilenameUtils.getExtension(file.getName());
 
 
-                if (!fileExtension.equals("bpmn")){
-                    continue;}
-                else{selectedFiles.add(file);}
+                    if (!fileExtension.equals("bpmn")) {
+                        continue;
+                    } else {
+                        selectedFiles.add(file);
+                    }
 
+                }
+
+
+                selectedFilesList.setFileList(selectedFiles);
+                sceneController.changeScene("preview.fxml", event);
+
+            } catch (Exception e) {
+                //e.printStackTrace();
+                sceneController.changeScene("main.fxml", event);
             }
-
-
-
-            selectedFilesList.setFileList(selectedFiles);
-            sceneController.changeScene("preview.fxml", event);
-
-        } catch (Exception e) {
-            //e.printStackTrace();
-            sceneController.changeScene("main.fxml", event);
         }
-
-
-    }
 
 
 
