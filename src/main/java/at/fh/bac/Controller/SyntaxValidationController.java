@@ -1,6 +1,9 @@
 package at.fh.bac.Controller;
 
 import at.fh.bac.ErrorHandler.SyntaxErrorHandler;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,6 +12,8 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -16,8 +21,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Stream;
 
+import javafx.scene.control.Tooltip;
+import org.apache.commons.io.FileUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -33,20 +41,22 @@ import javax.xml.validation.Validator;
 import static at.fh.bac.Controller.FileController.selectedFilesList;
 
 
-public class XMLController implements Initializable {
+public class SyntaxValidationController implements Initializable {
 
     //TODO for each file, generate a new file to put validation errors in it
     //TODO catch fucking exceptions and write them to file
 
     private ClassLoader cl = getClass().getClassLoader();
     private HashMap<String, String> xsdFileList = new HashMap<>();
-    private SyntaxErrorHandler syntaxErrorHandler = new SyntaxErrorHandler();
     private SceneController sceneController = new SceneController();
     private List<File> filesToValidate;
     private int errorCount = 0;
     private HashMap<File, List<Exception>> errorFileMap;
     private List<Exception> errorList = new ArrayList<>();
-    @FXML private Button nextButton = new Button();
+    @FXML
+    private Button nextButton = new Button();
+    @FXML
+    private Button goBackBtn = new Button();
 
     @FXML
     TextArea validationTxtArea;
@@ -64,6 +74,9 @@ public class XMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         nextButton.setDisable(true);
+        nextButton.setTooltip(new Tooltip("Go to semantic constraint definition"));
+        goBackBtn.setTooltip(new Tooltip("Cancel test"));
+        goBackBtn.setText("Cancel");
         validationTxtArea.setEditable(false);
 
         xsdFileList.put("schema.xsd", "https://www.omg.org/spec/BPMN/20100501/BPMN20.xsd");
@@ -79,8 +92,8 @@ public class XMLController implements Initializable {
             fetchXMLSchema();
             //fileValidator();
 
-            URL schemaPath = new URL(cl.getResource("XML/schema.xsd").toString());
-            //URL schemaFile = new URL(cl.getResource("XML/schema.xsd"));
+            URL schemaPath = new URL(cl.getResource("XSD/schema.xsd").toString());
+            //URL schemaFile = new URL(cl.getResource("XSD/schema.xsd"));
 
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = factory.newSchema(schemaPath);
@@ -93,16 +106,14 @@ public class XMLController implements Initializable {
                 errorList = new ArrayList<>();
                 validateXml(schema, file.getPath());
                 errorFileMap.put(file, errorList);
-                //System.out.println(errorCount + " errors have been found in " + file.getName());
-                //System.out.println(errorFileMap);
+
+                //store errorFileMap in JSON object
+                selectedFilesList.getTestJSON().put("errorFileMap", errorFileMap);
             }
             nextButton.setDisable(false);
+            System.out.println(selectedFilesList.getTestJSON());
 
-            /*
-            errorFileMap.forEach((key, value) -> {
-                System.out.println("File : " + key + " Exceptions : " + value);
-            });
-            */
+            createJson();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,52 +121,21 @@ public class XMLController implements Initializable {
     }
 
 
-    /**
-     * Read Content of File
-     *
-     * @param filePath : Path of File
-     * @return : returns a contentBuilder
-     */
-    private static String readLineByLineJava8(String filePath) {
-        StringBuilder contentBuilder = new StringBuilder();
-
-        try (Stream<String> stream = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)) {
-            stream.forEach(s -> contentBuilder.append(s).append("\n"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return contentBuilder.toString();
-    }
-
-
-
     private void fetchXMLSchema() throws Exception {
 
         for (String filename : xsdFileList.keySet()) {
             URL url = new URL(xsdFileList.get(filename));
 
-            if (cl.getResource("XML/" + filename) == null) {
-                validationTxtArea.appendText("Fetching latest XML schema ...\n");
+            if (cl.getResource("XSD/" + filename) == null) {
+                validationTxtArea.appendText("Fetching latest XSD schema ...\n");
                 ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-                FileOutputStream fos = new FileOutputStream("src/main/resources/XML/" + filename);
+                FileOutputStream fos = new FileOutputStream("src/main/resources/XSD/" + filename);
                 fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
             }
 
 
         }
 
-    }
-
-    @FXML
-    private void goBack(ActionEvent event) throws Exception {
-
-        sceneController.changeScene("main.fxml", event);
-    }
-
-    @FXML
-    private void next(ActionEvent event) throws Exception{
-        sceneController.changeScene("semanticsForm.fxml", event);
     }
 
 
@@ -190,7 +170,7 @@ public class XMLController implements Initializable {
             // setting my own error handler
             validator.setErrorHandler(errorHandler);
 
-            // preparing the XML file as a SAX source
+            // preparing the XSD file as a SAX source
             SAXSource source = new SAXSource(
                     new InputSource(new java.io.FileInputStream(xmlName)));
 
@@ -207,13 +187,55 @@ public class XMLController implements Initializable {
         }
     }
 
-    private void addException(Exception exception){
+    private void createJson(){
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("date", selectedFilesList.getDateOfTest());
+        jsonObject.put("files", selectedFilesList.getFileList());
+        //jsonObject.put("filesErrors", selectedFilesList.getErrorFileMap());
+        jsonObject.put("constraints", "constraints");
+
+
+        for (File file : selectedFilesList.getErrorFileMap().keySet()){
+            List<String> errors = new ArrayList<>();
+            try {
+                //errors.add(selectedFilesList.getErrorFileMap().get(file).toString());
+                for (Exception e : selectedFilesList.getErrorFileMap().get(file)){
+                    errors.add(e.getMessage());
+                }
+
+            }catch(Exception e ){
+                e.printStackTrace();
+                errors.add("No Errors in this file!");
+            }
+            JSONObject errorFileList = new JSONObject();
+            errorFileList.put(file.getName(), errors);
+            jsonObject.put("fileErrorList", errorFileList);
+        }
+
+        System.out.println("my JSON object: " + jsonObject);
+
+    }
+
+
+    private void addException(Exception exception) {
         errorCount++;
         errorList.add(exception);
-        System.out.println(exception.toString());
         validationTxtArea.appendText(exception.toString() + "\n");
         //exception.printStackTrace();
     }
+
+    @FXML
+    private void goBack(ActionEvent event) throws Exception {
+
+        sceneController.changeScene("fileUpload.fxml", event);
+    }
+
+    @FXML
+    private void next(ActionEvent event) throws Exception {
+        sceneController.changeScene("semanticsForm.fxml", event);
+    }
+
 
 }
 

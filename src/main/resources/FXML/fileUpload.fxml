@@ -11,17 +11,17 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@../CSS/main.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="at.fh.bac.Controller.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@../CSS/main.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="at.fh.bac.Controller.FileController">
    <top>
       <AnchorPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
+            <Text fill="WHITE" layoutX="216.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File Upload" textAlignment="CENTER" wrappingWidth="368.2060546875" />
             <ImageView fitHeight="67.0" fitWidth="83.0" layoutX="367.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/oval.png" />
                </image>
             </ImageView>
-            <Text fill="WHITE" layoutX="216.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Menu" textAlignment="CENTER" wrappingWidth="368.2060546875" />
-            <Text fill="WHITE" layoutX="390.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="M">
+            <Text fill="WHITE" layoutX="394.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="F">
                <font>
                   <Font size="24.0" />
                </font>
@@ -42,14 +42,14 @@
       <AnchorPane prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
    </right>
    <center>
-      <AnchorPane prefHeight="286.0" prefWidth="619.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="286.0" prefWidth="601.0" BorderPane.alignment="CENTER">
          <children>
             <Line endX="310.0" layoutX="308.0" startX="-308.0" />
-            <VBox layoutX="249.0" layoutY="96.0" prefHeight="111.0" prefWidth="121.0" spacing="15.0">
+            <VBox layoutX="249.0" layoutY="95.0" prefHeight="104.0" prefWidth="136.0" spacing="15.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#changeScene" prefHeight="27.0" prefWidth="120.0" text="Start New Test" textAlignment="CENTER" />
-                  <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="120.0" text="History" textAlignment="CENTER" />
-                  <Button mnemonicParsing="false" onAction="#quit" prefHeight="27.0" prefWidth="120.0" text="Quit" textAlignment="CENTER" />
+                  <Button fx:id="filePickerBtn" mnemonicParsing="false" onAction="#filePicker" prefHeight="27.0" prefWidth="132.0" text="Upload Files" />
+                  <Button fx:id="directoryPickerBtn" mnemonicParsing="false" onAction="#dirPicker" prefHeight="27.0" prefWidth="132.0" text="Upload Directory" />
+                  <Button fx:id="backToMenuBtn" mnemonicParsing="false" onAction="#navigateToMenu" prefHeight="27.0" prefWidth="132.0" text="Back to Menu" />
                </children>
             </VBox>
             <Line endX="301.0" endY="1.0" layoutX="317.0" layoutY="301.0" startX="-317.5" startY="0.5" />

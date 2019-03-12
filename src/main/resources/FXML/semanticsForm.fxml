@@ -1,28 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" stylesheets="@../CSS/main.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fh.bac.Controller.SemanticsFormController">
-   <children>
-      <ImageView fitHeight="96.0" fitWidth="65.0" layoutX="394.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/oval.png" />
-         </image>
-      </ImageView>
-      <Text fill="WHITE" layoutX="419.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="S">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Text>
-      <Text fill="WHITE" layoutX="339.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Define Semantic Constraints" />
-      <Button layoutX="62.0" layoutY="515.0" mnemonicParsing="false" text="Cancel" />
-      <Button fx:id="addConstraintButton" layoutX="364.0" layoutY="179.0" mnemonicParsing="false" onAction="#addConstraint" prefHeight="27.0" prefWidth="125.0" text="Add Constraint" />
-      <ListView fx:id="constraintListView" layoutX="241.0" layoutY="218.0" prefHeight="348.0" prefWidth="371.0" />
-   </children>
-</AnchorPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@../CSS/main.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="at.fh.bac.Controller.SemanticsFormController">
+   <top>
+      <AnchorPane prefHeight="150.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="67.0" fitWidth="83.0" layoutX="367.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/oval.png" />
+               </image>
+            </ImageView>
+            <Text fill="WHITE" layoutX="216.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Semantic Constraints" textAlignment="CENTER" wrappingWidth="368.2060546875" />
+            <Text fill="WHITE" layoutX="393.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="S">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+      </AnchorPane>
+   </top>
+   <bottom>
+      <AnchorPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="268.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Cancel" />
+            <Button fx:id="nextButton" defaultButton="true" layoutX="485.0" layoutY="14.0" mnemonicParsing="false" onAction="#next" text="Next" />
+         </children></AnchorPane>
+   </bottom>
+   <left>
+      <AnchorPane prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+   </left>
+   <right>
+      <AnchorPane prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+   </right>
+   <center>
+      <AnchorPane prefHeight="286.0" prefWidth="601.0" BorderPane.alignment="CENTER">
+         <children>
+            <Line endX="310.0" layoutX="308.0" startX="-308.0" />
+            <Line endX="301.0" endY="1.0" layoutX="317.0" layoutY="301.0" startX="-317.5" startY="0.5" />
+            <ListView id="lv" fx:id="constraintListView" layoutX="61.0" layoutY="36.0" prefHeight="232.0" prefWidth="498.0" />
+            <Button layoutX="248.0" layoutY="9.0" mnemonicParsing="false" onAction="#addConstraint" prefHeight="27.0" prefWidth="124.0" text="Add Constraint..." />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

@@ -1,54 +1,63 @@
 package at.fh.bac.Controller;
 
+import at.fh.bac.Model.TripletModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.util.Pair;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class SemanticsFormController implements Initializable {
 
     @FXML
-    private Button addConstraintButton;
-    @FXML
     private TextField constraintNameField;
 
-    @FXML private  ComboBox comboBox;
+    @FXML
+    private ComboBox comboBox;
 
-    private ObservableList<String> choices = FXCollections.observableArrayList();
+    private ObservableList<String> typeList = FXCollections.observableArrayList();
+    private ObservableList<String> constraintList = FXCollections.observableArrayList();
+    private SceneController sceneController = new SceneController();
 
-    private ObservableList<Pair<String, String>> listOfConstraints =  FXCollections.observableArrayList();
+    private ObservableList<TripletModel<String, String, String>> listOfConstraints = FXCollections.observableArrayList();
+    private ObservableList<String> listOfStringConstraints = FXCollections.observableArrayList();
 
-    private String name;
-    private String type;
+    private ObservableList<String> semanticOverviewList = FXCollections.observableArrayList();
 
-    @FXML private ListView constraintListView;
+
+    @FXML
+    private ListView constraintListView;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        choices.add("StartEvent");
-        choices.add("Task");
-        choices.add("EndEvent");
-        choices.add("Gateway");
+        typeList.add("StartEvent");
+        typeList.add("Task");
+        typeList.add("EndEvent");
+        typeList.add("Gateway");
+
+        constraintList.add("Name");
+        constraintList.add("Number of occurrences");
+        //constraintList.add("");
+        //constraintList.add("");
+        //constraintList.add("");
 
     }
 
 
     @FXML
+    @SuppressWarnings("unchecked")
     private void addConstraint() {
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        Dialog<TripletModel<String, String, String>> dialog = new Dialog<>();
         dialog.setTitle("Add Constraint");
         dialog.setHeaderText("Please add a semantic constraint");
         dialog.setContentText("Constraint");
@@ -63,49 +72,81 @@ public class SemanticsFormController implements Initializable {
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
 
-        ComboBox comboBox = new ComboBox();
-        comboBox.setItems(choices);
+        ComboBox typeComboBox = new ComboBox();
+        typeComboBox.setItems(typeList);
+
+        ComboBox constraintComboBox = new ComboBox();
+        constraintComboBox.setItems(constraintList);
 
         constraintNameField = new TextField();
         constraintNameField.setPromptText("Name");
 
 
-        grid.add(new Label("Type: "), 0, 1);
-        grid.add(comboBox, 1, 1);
-        grid.add(new Label("must be named: "), 0, 0);
-        grid.add(constraintNameField, 1, 0);
+        grid.add(new Label("Type: "), 0, 0);
+        grid.add(typeComboBox, 1, 0);
+
+        grid.add(new Label("Constraint: "), 0, 1);
+        grid.add(constraintComboBox, 1, 1);
+
+        grid.add(new Label("Value: "), 0, 2);
+        grid.add(constraintNameField, 1, 2);
 
         Node addButton = dialog.getDialogPane().lookupButton(addButtonType);
 
 
         dialog.getDialogPane().setContent(grid);
 
+
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == addButtonType) {
-                return new Pair<>(comboBox.getValue().toString(), constraintNameField.getText());
-            }
-            return null;
-        });
+                    if (dialogButton == addButtonType) {
 
-        Optional<Pair<String, String>> result = dialog.showAndWait();
+                        try {
+                            //return new Pair<>(constraintComboBox.getValue().toString(), constraintNameField.getText());
+                            return new TripletModel<>(typeComboBox.getValue().toString(), constraintComboBox.getValue().toString(), constraintNameField.getText());
+                        }catch(NullPointerException npe) {
+                            Alert alert = new Alert(Alert.AlertType.WARNING, "Fields must not be empty!");
+                            alert.showAndWait();
+                            addConstraint();
+                        }
+                    }
+                    return null;
+                });
 
-        result.ifPresent(listStringPair -> {
-            name = listStringPair.getValue();
-            type = listStringPair.getKey();
-            listOfConstraints.add(listStringPair);
-            System.out.println("Type " + type + " must be named " + name);
-            System.out.println(listOfConstraints);
-            constraintListView.setItems(listOfConstraints);
-            System.out.println(constraintListView.getItems());
+                //Optional<Pair<String, String>> result = dialog.showAndWait();
+                Optional < TripletModel < String, String, String >> result = dialog.showAndWait();
 
+
+        result.ifPresent(newConstraint -> {
+            String name = newConstraint.getValue();
+            String type = newConstraint.getType();
+            String constraint = newConstraint.getConstraint();
+            listOfConstraints.add(newConstraint);
+            listOfStringConstraints.add(formatForListView(newConstraint));
+            constraintListView.setItems(listOfStringConstraints);
             addConstraint();
         });
 
+
+
+}
+
+    private String formatForListView(TripletModel entry) {
+        String type = entry.getType().toString().toUpperCase();
+        String constraint = entry.getConstraint().toString().toUpperCase();
+        String value = entry.getValue().toString().toUpperCase();
+
+        return ("Type " + type + " has constraint " + constraint + " with value " + value);
     }
 
-    private void saveConstraint() {
-        String name = constraintNameField.getText();
-        String type = comboBox.getTypeSelector();
+    @FXML
+    private void goBack(ActionEvent event) throws Exception {
+        sceneController.changeScene("fileUpload.fxml", event);
+    }
+
+    @FXML
+    private void next(ActionEvent event) throws Exception {
+        //fillOverviewList();
+        sceneController.changeScene("semanticValidation.fxml", event);
     }
 
 }
