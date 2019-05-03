@@ -17,7 +17,7 @@ public class Controller {
     @FXML
     private void changeScene(ActionEvent event) throws Exception{
 
-        sceneController.changeScene("main.fxml", event);
+        sceneController.changeScene("fileUpload.fxml", event);
 
     }
 
