@@ -1,6 +1,7 @@
 package at.fh.bac.Controller;
 
 import at.fh.bac.ErrorHandler.SyntaxErrorHandler;
+import at.fh.bac.Model.FileListModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -111,7 +112,8 @@ public class SyntaxValidationController implements Initializable {
                 selectedFilesList.getTestJSON().put("errorFileMap", errorFileMap);
             }
             nextButton.setDisable(false);
-            System.out.println(selectedFilesList.getTestJSON());
+
+           // System.out.println(selectedFilesList.getTestJSON());
 
             createJson();
 
@@ -215,6 +217,7 @@ public class SyntaxValidationController implements Initializable {
 
         System.out.println("my JSON object: " + jsonObject);
 
+        persistData("results.txt", selectedFilesList);
     }
 
 
@@ -236,6 +239,19 @@ public class SyntaxValidationController implements Initializable {
         sceneController.changeScene("semanticsForm.fxml", event);
     }
 
+
+    private void persistData(String filename, FileListModel obj){
+
+        try {
+            FileOutputStream fos = new FileOutputStream(filename);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+
+            oos.writeObject(obj);
+            fos.close();
+        }catch(IOException e){System.out.println("Persisting Data went wrong"); e.printStackTrace();}
+
+    }
 
 }
 

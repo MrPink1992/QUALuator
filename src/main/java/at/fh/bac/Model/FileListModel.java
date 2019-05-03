@@ -4,16 +4,16 @@ package at.fh.bac.Model;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.Date;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileListModel {
+public class FileListModel implements Serializable {
 
     private String dateOfTest;
     private List<File> fileList;
     private HashMap<File, List<Exception>> errorFileMap = new HashMap<>();
-    private JSONObject testJSON = new JSONObject();
+    private transient JSONObject testJSON = new JSONObject();
 
     public FileListModel() {
     }

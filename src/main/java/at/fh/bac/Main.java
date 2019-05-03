@@ -1,13 +1,18 @@
 package at.fh.bac;
 
+import at.fh.bac.Model.FileListModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -23,25 +28,35 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        URI jarPath = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI();
-        System.out.println(jarPath);
+        try
+        {
+            // Reading the object from a file
+            FileInputStream file = new FileInputStream("results.json");
+            ObjectInputStream in = new ObjectInputStream(file);
 
-        File resultsFolder = new File(jarPath + "/TestResults/");
-        System.out.println(resultsFolder);
+            // Method for deserialization of object
+            FileListModel testFileListModel = (FileListModel) in.readObject();
 
-        boolean created =  resultsFolder.mkdir();
+            in.close();
+            file.close();
 
-        if(created)
-            System.out.println("Folder was created !");
-        else
-            System.out.println("Unable to create folder");
+            System.out.println("Object has been deserialized ");
+            System.out.println(testFileListModel);
 
+        }
+
+        catch(IOException ex)
+        {
+            System.out.println("IOException is caught");
+        }
 
         Parent root = FXMLLoader.load(getClass().getResource("/FXML/menu.fxml"));
         primaryStage.setTitle("QUALuator");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.setResizable(false);
         primaryStage.show();
+
+
     }
 
 
